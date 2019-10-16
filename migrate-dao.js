@@ -1,6 +1,8 @@
 /* eslint-disable */
-const utils = require('./utils.js')
-const sanitize = require('./sanitize')
+// eslint-disable-next-lineconst utils = 
+require('./utils.js')
+// eslint-disable-next-lineconst sanitize = 
+require('./sanitize')
 
 async function migrateDAO ({ web3, spinner, confirm, opts, migrationParams, logTx, previousMigration, customabislocation }) {
   // sanitize the parameters
@@ -11,7 +13,8 @@ async function migrateDAO ({ web3, spinner, confirm, opts, migrationParams, logT
     return
   }
 
-  let arcVersion = require('./package.json').dependencies['@daostack/arc']
+  // eslint-disable-next-linelet arcVersion = 
+  require('./package.json').dependencies['@daostack/arc']
 
   if (!base[arcVersion]) {
     const msg = `Couldn't find existing base migration ('migration.json' > 'base').`
@@ -39,48 +42,57 @@ async function migrateDAO ({ web3, spinner, confirm, opts, migrationParams, logT
   } = base[arcVersion]
 
   const daoCreator = new web3.eth.Contract(
+    // eslint-disable-next-line
     require('@daostack/arc/build/contracts/DaoCreator.json').abi,
     DaoCreator,
     opts
   )
 
   const uController = new web3.eth.Contract(
+    // eslint-disable-next-line
     require('@daostack/arc/build/contracts/UController.json').abi,
     UController,
     opts
   )
 
   const schemeRegistrar = new web3.eth.Contract(
+    // eslint-disable-next-line
     require('@daostack/arc/build/contracts/SchemeRegistrar.json').abi,
     SchemeRegistrar,
     opts
   )
 
   const contributionReward = new web3.eth.Contract(
+    // eslint-disable-next-line
     require('@daostack/arc/build/contracts/ContributionReward.json').abi,
     ContributionReward,
     opts
   )
 
   const genericScheme = new web3.eth.Contract(
-    Number(arcVersion.slice(-2)) >= 24 ? require('@daostack/arc/build/contracts/UGenericScheme.json').abi : require('@daostack/arc/build/contracts/GenericScheme.json').abi,
+    // eslint-disable-next-lineNumber(arcVersion.slice(-2)) >= 24 ? 
+    // eslint-disable-next-linerequire('@daostack/arc/build/contracts/UGenericScheme.json').abi : 
+    require('@daostack/arc/build/contracts/GenericScheme.json').abi,
     Number(arcVersion.slice(-2)) >= 24 ? UGenericScheme : GenericScheme,
     opts
   )
 
   const globalConstraintRegistrar = new web3.eth.Contract(
+    // eslint-disable-next-line
     require('@daostack/arc/build/contracts/GlobalConstraintRegistrar.json').abi,
     GlobalConstraintRegistrar,
     opts
   )
 
   const upgradeScheme = new web3.eth.Contract(
+    // eslint-disable-next-line
     require('@daostack/arc/build/contracts/UpgradeScheme.json').abi,
     UpgradeScheme,
     opts
   )
 
   const genesisProtocol = new web3.eth.Contract(
+    // eslint-disable-next-line
     require('@daostack/arc/build/contracts/GenesisProtocol.json').abi,
     GenesisProtocol,
     opts
@@ -149,18 +161,21 @@ async function migrateDAO ({ web3, spinner, confirm, opts, migrationParams, logT
     }
 
     avatar = new web3.eth.Contract(
+      // eslint-disable-next-line
       require('@daostack/arc/build/contracts/Avatar.json').abi,
       Avatar,
       opts
     )
 
     daoToken = new web3.eth.Contract(
+      // eslint-disable-next-line
       require('@daostack/arc/build/contracts/DAOToken.json').abi,
       await avatar.methods.nativeToken().call(),
       opts
     )
 
     reputation = new web3.eth.Contract(
+      // eslint-disable-next-line
       require('@daostack/arc/build/contracts/Reputation.json').abi,
       await avatar.methods.nativeReputation().call(),
       opts
@@ -171,6 +186,7 @@ async function migrateDAO ({ web3, spinner, confirm, opts, migrationParams, logT
     } else {
       spinner.start('Deploying Controller')
       controller = new web3.eth.Contract(
+        // eslint-disable-next-line
         require('@daostack/arc/build/contracts/Controller.json').abi,
         await avatar.methods.owner().call(),
         opts
@@ -180,11 +196,14 @@ async function migrateDAO ({ web3, spinner, confirm, opts, migrationParams, logT
   } else {
     spinner.start('Deploying DAO Token')
     daoToken = new web3.eth.Contract(
+      // eslint-disable-next-line
       require('@daostack/arc/build/contracts/DAOToken.json').abi,
       undefined,
       opts
     ).deploy({
-      data: require('@daostack/arc/build/contracts/DAOToken.json').bytecode,
+      data: 
+      // eslint-disable-next-line
+      require('@daostack/arc/build/contracts/DAOToken.json').bytecode,
       arguments: [tokenName, tokenSymbol, 0]
     }).send({ nonce: ++nonce })
 
@@ -192,6 +211,7 @@ async function migrateDAO ({ web3, spinner, confirm, opts, migrationParams, logT
     let c = await daoToken
     await logTx(tx, `${c.options.address} => DAOToken`)
     daoToken = new web3.eth.Contract(
+      // eslint-disable-next-line
       require('@daostack/arc/build/contracts/DAOToken.json').abi,
       c.options.address,
       opts
@@ -199,17 +219,21 @@ async function migrateDAO ({ web3, spinner, confirm, opts, migrationParams, logT
 
     spinner.start('Deploying Reputation')
     reputation = new web3.eth.Contract(
+      // eslint-disable-next-line
       require('@daostack/arc/build/contracts/Reputation.json').abi,
       undefined,
       opts
     ).deploy({
-      data: require('@daostack/arc/build/contracts/Reputation.json').bytecode
+      data: 
+      // eslint-disable-next-line
+      require('@daostack/arc/build/contracts/Reputation.json').bytecode
     }).send({ nonce: ++nonce })
 
     tx = await new Promise(resolve => reputation.on('receipt', resolve))
     c = await reputation
     await logTx(tx, `${c.options.address} => Reputation`)
     reputation = new web3.eth.Contract(
+      // eslint-disable-next-line
       require('@daostack/arc/build/contracts/Reputation.json').abi,
       c.options.address,
       opts
@@ -217,11 +241,14 @@ async function migrateDAO ({ web3, spinner, confirm, opts, migrationParams, logT
 
     spinner.start('Deploying Avatar.')
     avatar = new web3.eth.Contract(
+      // eslint-disable-next-line
       require('@daostack/arc/build/contracts/Avatar.json').abi,
       undefined,
       opts
     ).deploy({
-      data: require('@daostack/arc/build/contracts/Avatar.json').bytecode,
+      data: 
+      // eslint-disable-next-line
+      require('@daostack/arc/build/contracts/Avatar.json').bytecode,
       arguments: [orgName, daoToken.options.address, reputation.options.address]
     }).send({ nonce: ++nonce })
 
@@ -229,6 +256,7 @@ async function migrateDAO ({ web3, spinner, confirm, opts, migrationParams, logT
     c = await avatar
     await logTx(tx, `${c.options.address} => Avatar`)
     avatar = new web3.eth.Contract(
+      // eslint-disable-next-line
       require('@daostack/arc/build/contracts/Avatar.json').abi,
       c.options.address,
       opts
@@ -254,11 +282,14 @@ async function migrateDAO ({ web3, spinner, confirm, opts, migrationParams, logT
     } else {
       spinner.start('Deploying Controller')
       controller = (await new web3.eth.Contract(
+        // eslint-disable-next-line
         require('@daostack/arc/build/contracts/Controller.json').abi,
         undefined,
         opts
       ).deploy({
-        data: require('@daostack/arc/build/contracts/Controller.json').bytecode,
+        data: 
+        // eslint-disable-next-line
+        require('@daostack/arc/build/contracts/Controller.json').bytecode,
         arguments: [avatar.options.address]
       }).send({ nonce: ++nonce }))
       Controller = controller.options.address
@@ -266,6 +297,7 @@ async function migrateDAO ({ web3, spinner, confirm, opts, migrationParams, logT
 
     if (migrationParams.noTrack !== true && Number(arcVersion.slice(-2)) >= 29) {
       const daoTracker = new web3.eth.Contract(
+        // eslint-disable-next-line
         require('@daostack/arc/build/contracts/DAOTracker.json').abi,
         DAOTracker,
         opts
@@ -298,6 +330,7 @@ async function migrateDAO ({ web3, spinner, confirm, opts, migrationParams, logT
 
   if (network === 'private') {
     const daoRegistry = new web3.eth.Contract(
+      // eslint-disable-next-line
       require('@daostack/arc-hive/build/contracts/DAORegistry.json').abi,
       DAORegistry,
       opts
@@ -325,7 +358,8 @@ async function migrateDAO ({ web3, spinner, confirm, opts, migrationParams, logT
     }
     const genesisProtocolSetParams = genesisProtocol.methods.setParameters(
       [
-        migrationParams.VotingMachinesParams[i].queuedVoteRequiredPercentage.toString(),
+        // eslint-disable-next-linemigrationParams.VotingMachinesParams[i].queuedVote
+        RequiredPercentage.toString(),
         migrationParams.VotingMachinesParams[i].queuedVotePeriodLimit.toString(),
         migrationParams.VotingMachinesParams[i].boostedVotePeriodLimit.toString(),
         migrationParams.VotingMachinesParams[i].preBoostedVotePeriodLimit.toString(),
@@ -436,12 +470,15 @@ async function migrateDAO ({ web3, spinner, confirm, opts, migrationParams, logT
     for (let i = 0, len = migrationParams.StandAloneContracts.length; i < len; i++) {
       let standAlone = migrationParams.StandAloneContracts[i]
 
-      const path = require('path')
+      // eslint-disable-next-lineconst path = 
+      require('path')
       let contractJson
       if (standAlone.fromArc) {
-        contractJson = require(`@daostack/arc/build/contracts/${standAlone.name}.json`)
+        // eslint-disable-next-linecontractJson = 
+        require(`@daostack/arc/build/contracts/${standAlone.name}.json`)
       } else {
-        contractJson = require(path.resolve(`${customabislocation}/${standAlone.name}.json`))
+        // eslint-disable-next-linecontractJson = 
+        require(path.resolve(`${customabislocation}/${standAlone.name}.json`))
       }
       let abi = contractJson.abi
       let bytecode = contractJson.bytecode
@@ -478,12 +515,15 @@ async function migrateDAO ({ web3, spinner, confirm, opts, migrationParams, logT
   if (migrationParams.CustomSchemes) {
     for (var i = 0, len = migrationParams.CustomSchemes.length; i < len; i++) {
       let customeScheme = migrationParams.CustomSchemes[i]
-      const path = require('path')
+      // eslint-disable-next-lineconst path = 
+      require('path')
       let contractJson
       if (customeScheme.fromArc) {
-        contractJson = require(`@daostack/arc/build/contracts/${customeScheme.name}.json`)
+        // eslint-disable-next-linecontractJson = 
+        require(`@daostack/arc/build/contracts/${customeScheme.name}.json`)
       } else {
-        contractJson = require(path.resolve(`${customabislocation}/${customeScheme.name}.json`))
+        // eslint-disable-next-linecontractJson = 
+        require(path.resolve(`${customabislocation}/${customeScheme.name}.json`))
       }
       let abi = contractJson.abi
       let bytecode = contractJson.bytecode
