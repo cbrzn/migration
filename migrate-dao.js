@@ -1,3 +1,4 @@
+/* eslint-disable */
 const utils = require('./utils.js')
 const sanitize = require('./sanitize')
 
